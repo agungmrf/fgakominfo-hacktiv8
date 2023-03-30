@@ -47,8 +47,8 @@ func (c *bookController) CreateBook(bookInput *BookInput) (*model.Book, error) {
 	book := &model.Book{
 		Name:      bookInput.Name,
 		Author:    bookInput.Author,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		CreatedAt: time.Time{},
+		UpdatedAt: time.Time{},
 	}
 
 	return c.repo.Create(book)
