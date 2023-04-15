@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"final-project/database"
+	"final-project/models"
 	"net/http"
 	"strconv"
 
