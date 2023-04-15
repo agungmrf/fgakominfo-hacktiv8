@@ -3,41 +3,42 @@ package database
 import (
 	"final-project/models"
 	"fmt"
+	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-const (
-	DB_HOST     = "localhost"
-	DB_USER     = "postgres"
-	DB_PASSWORD = "Digital2023"
-	DB_PORT     = 5432
-	DB_NAME     = "simple-api"
-	DEBUG_MODE  = true // true/false
-)
-
 var (
-	db  *gorm.DB
-	err error
+	host      = os.Getenv("DB_HOST")
+	user      = os.Getenv("DB_USER")
+	password  = os.Getenv("DB_PASSWORD")
+	dbPort    = os.Getenv("DB_PORT")
+	dbname    = os.Getenv("DB_NAME")
+	debugMode = os.Getenv("DEBUG_MODE")
+	db        *gorm.DB
+	err       error
 )
 
 func StartDB() {
-	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
-		DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT)
+	config := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, dbPort)
+	dsn := config
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-	db, err = gorm.Open(postgres.Open(config), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		log.Fatal("Error connecting to database :", err)
+	}
+
+	fmt.Println("Database connected successfully")
+	if debugMode == "true" {
+		db.Debug().AutoMigrate(models.User{}, models.Photo{}, models.Comment{}, models.SocialMedia{})
 	}
 
 	db.Debug().AutoMigrate(models.User{}, models.Photo{}, models.Comment{}, models.SocialMedia{})
+
 }
 
 func GetDB() *gorm.DB {
-	if DEBUG_MODE {
-		return db.Debug()
-	}
-
 	return db
 }
