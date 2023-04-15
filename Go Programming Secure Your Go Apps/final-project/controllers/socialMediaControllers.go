@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"final-project/database"
+	"final-project/helpers"
+	"final-project/models"
 	"net/http"
 	"strconv"
 
@@ -81,7 +84,7 @@ func UpdateSocialMedia(ctx *gin.Context) {
 	contentType := helpers.GetContentType(ctx)
 	SocialMedia := models.SocialMedia{}
 
-	socialMediaID, _ := strconv.Atoi(c.Param("socialMediaID"))
+	socialMediaID, _ := strconv.Atoi(ctx.Param("socialMediaID"))
 	userID := uint(userData["id"].(float64))
 
 	if contentType == appJSON {
@@ -93,7 +96,7 @@ func UpdateSocialMedia(ctx *gin.Context) {
 	SocialMedia.UserID = userID
 	SocialMedia.ID = uint(socialMediaID)
 
-	err := db.Model(&SocialMedia).Where("id = ?", socialMediaID).Updates(models.SocialMedia{Name: SocialMedia.Name, SocialMediaURL: SocialMedia.SocialMediaURL}).Error
+	err := db.Model(&SocialMedia).Where("id = ?", socialMediaID).Updates(models.SocialMedia{Name: SocialMedia.Name, SocialMediaUrl: SocialMedia.SocialMediaUrl}).Error
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"final-project/database"
+	"final-project/helpers"
+	"final-project/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,17 +43,17 @@ func UserRegister(c *gin.Context) {
 	})
 }
 
-func UserLogin(c *gin.Context) {
+func UserLogin(ctx *gin.Context) {
 	db := database.GetDB()
-	contentType := helpers.GetContentType(c)
+	contentType := helpers.GetContentType(ctx)
 	_, _ = db, contentType
 	User := models.User{}
 	password := ""
 
 	if contentType == appJSON {
-		c.ShouldBindJSON(&User)
+		ctx.ShouldBindJSON(&User)
 	} else {
-		c.ShouldBind(&User)
+		ctx.ShouldBind(&User)
 	}
 
 	password = User.Password
@@ -58,9 +61,9 @@ func UserLogin(c *gin.Context) {
 	err := db.Debug().Where("email = ?", User.Email).Take(&User).Error
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
+		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error":   "Unauthorized",
-			"message": "Invalid email/password",
+			"message": "invalid email/password",
 		})
 		return
 	}
@@ -68,16 +71,15 @@ func UserLogin(c *gin.Context) {
 	comparePass := helpers.ComparePass([]byte(User.Password), []byte(password))
 
 	if !comparePass {
-		c.JSON(http.StatusUnauthorized, gin.H{
+		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"error":   "Unauthorized",
-			"message": "Invalid email/password",
+			"message": "invalid email/password",
 		})
 		return
 	}
+	token := helpers.GenerateToken(User.ID, User.Email)
 
-	token := helpers.GenerateToken(User.ID, User.Username, User.Email)
-
-	c.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
 }

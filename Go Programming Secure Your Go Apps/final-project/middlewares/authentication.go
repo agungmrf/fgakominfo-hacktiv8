@@ -1,7 +1,7 @@
-package midlewares
+package middlewares
 
 import (
-	"go-jwt/helpers"
+	"final-project/helpers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

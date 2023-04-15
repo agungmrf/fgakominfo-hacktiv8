@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"final-project/database"
+	"final-project/helpers"
+	"final-project/models"
 	"net/http"
 	"strconv"
 

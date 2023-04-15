@@ -14,7 +14,7 @@ type Comment struct {
 	User    *User
 }
 
-func (c *Comment) BeforeCreate(tx *gorm.DB) (err error) {
+func (c *Comment) BeforeCreate(*gorm.DB) (err error) {
 	_, errCreate := govalidator.ValidateStruct(c)
 
 	if errCreate != nil {
@@ -26,7 +26,7 @@ func (c *Comment) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (c *Comment) BeforeUpdate(tx *gorm.DB) (err error) {
+func (c *Comment) BeforeUpdate(*gorm.DB) (err error) {
 	_, errUpdate := govalidator.ValidateStruct(c)
 
 	if errUpdate != nil {
