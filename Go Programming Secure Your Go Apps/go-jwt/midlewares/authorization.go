@@ -1,12 +1,13 @@
 package midlewares
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 	"go-jwt/database"
 	"go-jwt/models"
 	"net/http"
 	"strconv"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 func ProductAuthorization() gin.HandlerFunc {

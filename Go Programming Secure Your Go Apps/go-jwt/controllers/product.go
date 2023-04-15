@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"go-jwt/database"
 	"go-jwt/models"
 	"net/http"
 	"strconv"
+
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/gin-gonic/gin"
 )
